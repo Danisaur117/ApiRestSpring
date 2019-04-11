@@ -67,7 +67,7 @@ public class ApiController {
 												   @RequestBody ActorEntity actor){
 		ActorEntity actorRes = actorService.getEntityById(id);
 		
-		if(actorRes == null) return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+		if(actorRes == null) return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		
 		actorRes.setFirst_name(actor.getFirst_name());
 		actorRes.setLast_name(actor.getLast_name());
