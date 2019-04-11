@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.daniel.belmonte.ApiRestSpring.dao.entity.ActorEntity;
@@ -14,6 +15,7 @@ import com.daniel.belmonte.ApiRestSpring.dao.repository.ActorEntityRepository;
 @Service
 @Transactional
 public class ActorEntityService implements ActorEntityInterface {
+	@Autowired
 	private ActorEntityRepository repository;
 	
 	public ActorEntityService() {
