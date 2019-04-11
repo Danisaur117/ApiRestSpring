@@ -1,5 +1,6 @@
 package com.daniel.belmonte.ApiRestSpring.controllers;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,18 +43,6 @@ public class ApiController {
 		return new ResponseEntity<>(actorEntity, HttpStatus.OK);
 	}
 	
-//	@RequestMapping(value="addActor/{firstName}/{lastName}", method=RequestMethod.GET,
-//					produces="application/json")
-//	public ResponseEntity<ActorEntity> addActor(@PathVariable String firstName,
-//			@PathVariable(required = false) String lastName) {
-//		
-//		ActorEntity actorEntity = actorService.addEntity(new ActorEntity(firstName, lastName));
-//		
-//		if(actorEntity == null) return new ResponseEntity<>(null, HttpStatus.CONFLICT);
-//		
-//		return new ResponseEntity<>(actorEntity, HttpStatus.OK);
-//	}
-	
 	@RequestMapping(value="actors", method=RequestMethod.POST)
 	public ResponseEntity<Void> addActor(@RequestBody ActorEntity actor, UriComponentsBuilder builder){
 		ActorEntity actorEntity = new ActorEntity(actor.getFirst_name(), actor.getLast_name());
@@ -62,5 +51,30 @@ public class ApiController {
 		if(actor == null) return new ResponseEntity<>(HttpStatus.CONFLICT);
 		
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="actors/{id}", method=RequestMethod.DELETE)
+	public ResponseEntity<Void> deleteActor(@PathVariable int id){
+		Boolean deleted = actorService.deleteEntity(id);
+		
+		if(deleted == false) return new ResponseEntity<>(HttpStatus.CONFLICT);
+		
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="actors/{id}", method=RequestMethod.PUT, produces = "application/json")
+	public ResponseEntity<ActorEntity> modifyActor(@PathVariable int id,
+												   @RequestBody ActorEntity actor){
+		ActorEntity actorRes = actorService.getEntityById(id);
+		
+		if(actorRes == null) return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+		
+		actorRes.setFirst_name(actor.getFirst_name());
+		actorRes.setLast_name(actor.getLast_name());
+		actorRes.setLast_update(new Date());
+		Boolean updated = actorService.updateEntity(actorRes);
+		
+		return (updated)? new ResponseEntity<>(actorRes, HttpStatus.OK):
+						  new ResponseEntity<>(actorRes, HttpStatus.CONFLICT);
 	}
 }
