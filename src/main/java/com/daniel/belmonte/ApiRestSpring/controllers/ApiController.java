@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.daniel.belmonte.ApiRestSpring.dao.entity.ActorEntity;
@@ -28,5 +29,14 @@ public class ApiController {
 	public ResponseEntity<List<ActorEntity>> getActors(){
 		List<ActorEntity> list = actorService.getAllEntities();
 		return new ResponseEntity<>(list, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="actor", method=RequestMethod.GET, produces="application/json")
+	public ResponseEntity<ActorEntity> getEntityById(@RequestParam int id){
+		ActorEntity actorEntity = actorService.getEntityById(id);
+		
+		if(actorEntity == null) return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		
+		return new ResponseEntity<>(actorEntity, HttpStatus.OK);
 	}
 }
